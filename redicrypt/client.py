@@ -15,6 +15,9 @@ class Client(object):
     }
 
     SUPPORTED_HASHES = [
+        "blake2b-256",
+        "blake2b-384",
+        "blake2b-512",
         "sha1",
         "sha224",
         "sha256",
