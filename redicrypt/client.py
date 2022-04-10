@@ -12,6 +12,9 @@ class Client(object):
         "b64decode": "RC.GETB64",
         "b64encrypt": "RC.BSETENC",
         "b64decrypt": "RC.BGETENC",
+        "keygen": "RC.KEYGEN",
+        "setkey": "RC.SETKEY",
+        "recrypt": "RC.RECRYPT",
     }
 
     SUPPORTED_HASHES = [
@@ -53,6 +56,14 @@ class Client(object):
         redis_cmd = f"{_cmd} {' '.join(kwargs.values())}"
         return self.REDIS.execute_command(redis_cmd)
 
+    def keygen(self, bits: int):
+        """Generate a key on the server side, of len(bits)"""
+        return self._run(bits=bits)
+
+    def setkey(self), key: str:
+        """Set the redis key"""
+        return self._run(key=key)
+
     def hash(self, hashtype: str, key: str, value: str):
         if hashtype not in self.SUPPORTED_HASHES:
             raise AttributeError("%s is not a supported hash type." % hashtype)
@@ -73,6 +84,11 @@ class Client(object):
     def b64decode(self, key: str):
         """Return the decoded value from a base64 encoded key"""
         return self._run(key=key)
+
+    def recrypt(self, key: str):
+        """Fetch a key, decrypt it, and re-encrypt"""
+        return self._run(key=key)
+
 
     def b64encrypt(self, key: str, value: str):
         """Store an encrypted value, in a base64 encoded key"""
